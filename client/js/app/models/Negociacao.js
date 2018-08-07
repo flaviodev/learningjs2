@@ -6,11 +6,11 @@ class Negociacao {
         this._valor = valor;
     }
 
-    getData() { return this._data; }
+    get data() { return this._data; }
 
-    getQuantidade() { return this._quantidade; }
+    get quantidade() { return this._quantidade; }
     
-    getValor() { return this._valor; }
+    get valor() { return this._valor; }
 
-    getVolume() { return this._quantidade * this._valor; }
+    get volume() { return this._quantidade * this._valor; }
 }
