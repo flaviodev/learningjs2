@@ -26,6 +26,12 @@ class NegociacoesView {
                         <td>${n.volume}</td>
                     </tr>`).join('')}
             </tbody>
+            <tfoot>
+                <td colspan="3">TOTAL</td>
+                <td>
+                    ${model.negociacoes.reduce((total, n) => total + n.volume, 0.0)}
+                </td>
+            </tfoot>
             </table>
         `;
     }
