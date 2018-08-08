@@ -28,7 +28,7 @@ class NegociacoesView {
             </tbody>
             <tfoot>
                 <td colspan="3">TOTAL</td>
-                <td>
+                <td><!-- o segundo parametro do reduce é o valor inicial -->
                     ${model.negociacoes.reduce((total, n) => total + n.volume, 0.0)}
                 </td>
             </tfoot>
