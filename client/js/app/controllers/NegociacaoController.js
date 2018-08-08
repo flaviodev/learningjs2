@@ -11,10 +11,8 @@ class NegociacaoController {
     adiciona(event) {
         event.preventDefault();
 
-        let data = new Date(this._inputData.value.split('-'));
-
         let negociacao = new Negociacao(
-            data,
+            strToDate(this._inputData.value),
             this._inputQuantidade.value,
             this._inputValor.value
           );
@@ -22,3 +20,5 @@ class NegociacaoController {
           console.log(negociacao);
     }
 }
+//  spread operator -> cada item do array passa a ser um parametro para o new Date
+const strToDate = (strDate) =>  new Date(...strDate.split('-').map((item,i) => item - i % 2));
