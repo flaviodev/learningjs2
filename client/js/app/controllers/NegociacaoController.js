@@ -12,14 +12,13 @@ class NegociacaoController {
         event.preventDefault();
 
         let negociacao = new Negociacao(
-            strToDate(this._inputData.value),
+            new DateHelper().textoParaData(this._inputData.value),
             this._inputQuantidade.value,
             this._inputValor.value
           );
     
           console.log(negociacao);
+          console.log(new DateHelper().dataParaTexto(negociacao.data))
     }
 }
 
-//  spread operator -> cada item do array passa a ser um parametro para o new Date
-const strToDate = (strDate) =>  new Date(...strDate.split('-').map((item,i) => item - i % 2));
