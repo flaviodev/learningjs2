@@ -20,5 +20,6 @@ class NegociacaoController {
           console.log(negociacao);
     }
 }
+
 //  spread operator -> cada item do array passa a ser um parametro para o new Date
 const strToDate = (strDate) =>  new Date(...strDate.split('-').map((item,i) => item - i % 2));
