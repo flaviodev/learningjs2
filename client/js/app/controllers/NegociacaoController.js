@@ -43,4 +43,21 @@ class NegociacaoController {
                 this._inputQuantidade.value,
                 this._inputValor.value);
     }
+
+    importaNegociacoes() {
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', 'negociacoes/semana');
+
+        xhr.onreadystatechange = () => {
+            if(xhr.readyState == 4) {
+                if(xhr.status == 200) {
+                    console.log('Obtendo as negociações do servidor.')
+                } else {
+                    console.log('Não foi possível obter as negociações do servidor.')
+                }
+            }
+        };
+
+        xhr.send();
+    }
 }
