@@ -61,7 +61,16 @@
 
         let negociacao = new Proxy(new Negociacao(new Date(), 2, 100), {
 
+            get: function(target, prop, receiver) {
+
+                //console.log(`a propriedade "${prop}" foi inteceptada`);
+                return Reflect.get(target,prop,receiver);
+            }
+
         });
+        console.log(negociacao.quantidade);
+        console.log(negociacao.valor);
+
 
     </script>
 
