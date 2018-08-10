@@ -18,9 +18,4 @@ class ListaNegociacoes {
 
         this._negociacoes = [];
     }
-
-    get armadilha() {
-
-        this._armadilha;
-    }
 }
