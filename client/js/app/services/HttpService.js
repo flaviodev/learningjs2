@@ -16,7 +16,6 @@ class HttpService {
                     }
                 }
             }
-
             xhr.send();
         });
     }

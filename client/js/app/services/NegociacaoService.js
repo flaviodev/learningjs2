@@ -1,13 +1,13 @@
 class NegociacaoService {
 
     constructor() {
-        this.http = new HttpService();
+        this._http = new HttpService();
     }
 
     obterNegociacoesDaSemana() {
 
         return new Promise((resolve, reject) => {
-            this.http
+            this._http
                 .get('negociacoes/semana')
                 .then(negociacoes => {
                     resolve(negociacoes.map(objeto => new Negociacao(new Date(objeto.data), objeto.quantidade, objeto.valor)));
@@ -22,7 +22,7 @@ class NegociacaoService {
     obterNegociacoesDaSemanaAnterior() {
 
         return new Promise((resolve, reject) => {
-            this.http
+            this._ttp
                 .get('negociacoes/anterior')
                 .then(negociacoes => {
                     resolve(negociacoes.map(objeto => new Negociacao(new Date(objeto.data), objeto.quantidade, objeto.valor)));
@@ -37,7 +37,7 @@ class NegociacaoService {
     obterNegociacoesDaSemanaRetrasada() {
 
         return new Promise((resolve, reject) => {
-            this.http
+            this._http
                 .get('negociacoes/retrasada')
                 .then(negociacoes => {
                     resolve(negociacoes.map(objeto => new Negociacao(new Date(objeto.data), objeto.quantidade, objeto.valor)));
