@@ -5,20 +5,28 @@
     <title>Learning IndexDB</title>
 </head>
 <body>
+    <script src="js/app/models/Negociacao.js"></script>
     <script>
         var conexao;
         var nomeDoBanco = 'learningjs2'
         
-        var versaoCorrenteDoBanco = 1;
+        var versaoCorrenteDoBanco = 2;
        
         var migracoes = [];
         migracoes[1] = { versao: 1, migracao: conexao => conexao.createObjectStore('negociacoes')}; 
+        migracoes[2] = { versao: 2, migracao: conexao => { 
+                if(conexao.objectStoreNames.contains('negociacoes')) {
+                    conexao.deleteObjectStore('negociacoes');
+                }
+                conexao.createObjectStore('negociacoes', { autoIncrement: true });
+            }
+        }; 
         
         var openRequest = window.indexedDB.open(nomeDoBanco,versaoCorrenteDoBanco);
         
         openRequest.onupgradeneeded = e => {
             console.log('Cria ou altera banco existente!');
-            var conexaoAlteracaoDoBanco = e.target.result;
+            let conexaoAlteracaoDoBanco = e.target.result;
             migracoes[versaoCorrenteDoBanco].migracao(conexaoAlteracaoDoBanco);
         };
 
@@ -31,6 +39,17 @@
             console.log(e.target.console.error);
         };
 
+
+        function adiciona() {
+
+            let transacao = conexao.transaction(['negociacoes'],'readwrite');
+
+            let store = transacao.objectStore('negociacoes');
+
+            let negociacao = new Negociacao(new Date(), 200, 1);
+
+            let request = store.add(negociacao);
+        }
 
     </script>
 </body>
