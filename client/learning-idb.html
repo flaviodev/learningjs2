@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Learning IndexDB</title>
+</head>
+<body>
+    <script>
+        var openRequest = window.indexedDB.open("negociacoes",1);
+        
+        openRequest.onupgradeneeded = e => {
+            console.log('Cria ou altera banco existente!');
+        };
+
+        openRequest.onsuccess = e => {
+            console.log('Conexão obtida com sucesso!');
+        };
+
+        openRequest.onerror = e => {
+            console.log(e.target.console.error);
+        };
+    </script>
+</body>
+</html>
