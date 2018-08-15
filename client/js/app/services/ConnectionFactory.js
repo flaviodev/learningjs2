@@ -3,7 +3,12 @@ var currentVersion = 1;
 var dbName = 'aluraframe';
 
 var migrations = [];
-migrations[1] = { version: 1, migration: connection => stores.forEach(store => conection.createObjectStore(store))};
+migrations[1] = { version: 1, migration: connection => stores.forEach(store => {
+        if(connection.objectStoreNames.contains(store)) 
+            connection.deleteObjectStore(store);
+
+        connection.createObjectStore(store, { autoIncrement: true });
+    })};
 
 class ConnectionFactory {
 
@@ -21,19 +26,17 @@ class ConnectionFactory {
             openRequest.onupgradeneeded = e => {
                 
                 console.log('Cria ou altera banco existente!');
-                
-                let onupgradeneededConnection = e.target.result;
-                migrations[currentVersion].migration(onupgradeneededConnection);
+                migrations[currentVersion].migration(e.target.result);
             };
   
             openRequest.onsuccess = e => {
 
-                resolve.apply(e.target.result);
+                resolve(e.target.result);
             };
     
             openRequest.onerror = e => {
     
-                reject.apply(e.target.console.error)
+                reject(e.target.console.error.name);
             };
         });
     }
