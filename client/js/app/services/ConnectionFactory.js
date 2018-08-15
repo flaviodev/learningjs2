@@ -1,9 +1,9 @@
 var ConnectionFactory = (function() {
-    let stores = ['negociacoes'];
-    let currentVersion = 1;
-    let dbName = 'aluraframe';
+    const stores = ['negociacoes'];
+    const currentVersion = 1;
+    const dbName = 'aluraframe';
 
-    let migrations = [];
+    const migrations = [];
     migrations[1] = { version: 1, migration: connection => stores.forEach(store => {
             if(connection.objectStoreNames.contains(store)) 
                 connection.deleteObjectStore(store);
@@ -12,6 +12,7 @@ var ConnectionFactory = (function() {
         })};
 
     let connection = null;
+    let close = null;
 
     return class ConnectionFactory {
 
@@ -36,6 +37,7 @@ var ConnectionFactory = (function() {
 
                     if(!connection) { 
                         connection = e.target.result;
+                        close = connection.close.bind(connection);
                         connection.close = function() {
                             throw new Error('Você não pode fechar a conexão diretamente');
                         }
@@ -48,6 +50,16 @@ var ConnectionFactory = (function() {
                     reject(e.target.console.error.name);
                 };
             });
+        }
+
+        static closeConnection(){
+
+            if(connection){
+
+                close();
+                connection = null;
+                close = null;
+            }
         }
 
     }
