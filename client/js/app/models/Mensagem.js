@@ -1,5 +1,6 @@
 class Mensagem {
 
+    // valor default para o parametro
     constructor(texto='') {
 
         this._texto = texto;

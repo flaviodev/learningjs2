@@ -11,6 +11,7 @@ class ListaNegociacoes {
 
     get negociacoes() {
         
+        // programação defensiva que garante uma cópia do array no getter
         return [].concat(this._negociacoes);
     }
 

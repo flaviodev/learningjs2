@@ -1,3 +1,5 @@
+// module pattern -> isola os atritubos das função, pois uma vez que es6 não possui variaveis 
+//    estáticas essa é a forma de criar variáveis acessíveis em um escopo estático de forma isolada
 var ConnectionFactory = (function() {
     const stores = ['negociacoes'];
     const currentVersion = 1;
@@ -23,6 +25,7 @@ var ConnectionFactory = (function() {
 
         static getConnection() {
 
+            // exemplo de como criar uma promisse
             return new Promise((resolve, reject) => {
 
                 let openRequest = window.indexedDB.open(dbName,currentVersion);
@@ -38,6 +41,8 @@ var ConnectionFactory = (function() {
                     if(!connection) { 
                         connection = e.target.result;
                         close = connection.close.bind(connection);
+
+                        // monkey patch -> override da função
                         connection.close = function() {
                             throw new Error('Você não pode fechar a conexão diretamente');
                         }

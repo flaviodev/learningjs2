@@ -2,6 +2,7 @@ class NegociacaoController {
 
     constructor() {
 
+        // bind do querySelector para o $ 'like jquery'
         let $ = document.querySelector.bind(document);
         this._inputData = $('#data');
         this._inputQuantidade =  $('#quantidade');
@@ -16,6 +17,7 @@ class NegociacaoController {
 
     adiciona(event) {
 
+        // desabilita o evento padrão do botao submit
         event.preventDefault();
         this._listaNegociacoes.adiciona(this._criaNegociacao());
         this._mensagem.texto = 'Negociacao adicionada com sucesso';
@@ -48,6 +50,7 @@ class NegociacaoController {
 
         let service = new NegociacaoService();
 
+        // recurso extremamente útil para 'encadear' diversas promisses 
         Promise.all([
             service.obterNegociacoesDaSemana(),
             service.obterNegociacoesDaSemanaAnterior(),

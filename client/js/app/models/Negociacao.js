@@ -5,6 +5,8 @@ class Negociacao {
         this._data = new Date(data.getTime());
         this._quantidade = quantidade;
         this._valor = valor;
+
+        // congela o estado do objeto
         Object.freeze(this);
     }
 
