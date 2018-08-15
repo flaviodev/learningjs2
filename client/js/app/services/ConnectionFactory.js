@@ -10,6 +10,8 @@ migrations[1] = { version: 1, migration: connection => stores.forEach(store => {
         connection.createObjectStore(store, { autoIncrement: true });
     })};
 
+var connection = null;
+
 class ConnectionFactory {
 
     constructor() {
@@ -31,7 +33,8 @@ class ConnectionFactory {
   
             openRequest.onsuccess = e => {
 
-                resolve(e.target.result);
+                if(!connection) connection = e.target.result;
+                resolve(connection);
             };
     
             openRequest.onerror = e => {
