@@ -14,6 +14,12 @@ class NegociacaoController {
         this._mensagem = new Bind(
             new Mensagem(), new MensagemView($('#mensagemView')), 'texto');
 
+        this._init();
+    }
+
+    // boa prática: deixar somente a atribuiçõe dos atributos no método construtor
+    _init() {
+
         ConnectionFactory
             .getConnection()
             .then(connection => new NegociacaoDao(connection))
