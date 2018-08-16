@@ -40,14 +40,13 @@ class NegociacaoDao {
 
                 let negociacoes = [];
                 cursor.onsuccess = e => {
+
                     let atual = e.target.result;
                 
                     if(atual) {
                 
                         let dado = atual.value;
-                
                         negociacoes.push(new Negociacao(dado._data, dado._quantidade, dado._valor));
-                
                         atual.continue();
                     } else {
                 
@@ -75,10 +74,10 @@ class NegociacaoDao {
             request.onsuccess = e => resolve('Negociações apagadas com sucesso');
    
             request.onerror = e => {
+                
                 console.log(e.target.error);
                 reject('Não foi possível apagar as negociações');
             };
-   
         });
     }
 }

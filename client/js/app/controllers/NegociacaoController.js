@@ -14,7 +14,6 @@ class NegociacaoController {
         this._mensagem = new Bind(
             new Mensagem(), new MensagemView($('#mensagemView')), 'texto');
 
-
         ConnectionFactory
             .getConnection()
             .then(connection => new NegociacaoDao(connection))
@@ -23,9 +22,10 @@ class NegociacaoController {
                 negociacoes.forEach(negociacao =>
                     this._listaNegociacoes.adiciona(negociacao)))
             .catch(erro => {
+
                 console.log(erro);
                 this._mensagem.texto = erro;
-                });
+            });
     }
 
     adiciona(event) {
@@ -35,13 +35,14 @@ class NegociacaoController {
 
         ConnectionFactory
             .getConnection()
-            .then(conexao => {
+            .then(connection => {
 
                 let negociacao = this._criaNegociacao();
 
-                new NegociacaoDao(conexao)
+                new NegociacaoDao(connection)
                     .adiciona(negociacao)
                     .then(() => {
+
                         this._listaNegociacoes.adiciona(negociacao);
                         this._mensagem.texto = 'Negociação adicionada com sucesso';
                         this._limpaFormulario();   
@@ -57,6 +58,7 @@ class NegociacaoController {
             .then(connection => new NegociacaoDao(connection))
             .then(dao => dao.apagaTodos())
             .then(mensagem => {
+
                 this._mensagem.texto = mensagem;
                 this._listaNegociacoes.esvazia();
             });
@@ -74,6 +76,7 @@ class NegociacaoController {
             request.onsuccess = e => resolve('Negociações removidas com sucesso');
     
             request.onerror = e => {
+
               console.log(e.target.error);
               reject('Não foi possível remover as negociações');
             }
@@ -106,9 +109,11 @@ class NegociacaoController {
             service.obterNegociacoesDaSemanaAnterior(),
             service.obterNegociacoesDaSemanaRetrasada()]
         ).then(negociacoes => {
+
             negociacoes
               .reduce((arrayAchatado, array) => arrayAchatado.concat(array), [])
               .forEach(negociacao => this._listaNegociacoes.adiciona(negociacao));
+            
             this._mensagem.texto = 'Negociações importadas com sucesso';
         })
         .catch(erro => this._mensagem.texto = erro);  
