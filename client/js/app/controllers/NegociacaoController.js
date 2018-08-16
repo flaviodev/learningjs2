@@ -104,6 +104,7 @@ class NegociacaoController {
         let service = new NegociacaoService();
 
         // funcao some itera o array e quando encontra o elemento para de efetaur a iteracao
+        // nesse caso a filtragem é para buscar o diff da importação com o que já existe (por isso a negação no some)
         service
             .obterNegociacoes()
             .then(negociacoes =>
