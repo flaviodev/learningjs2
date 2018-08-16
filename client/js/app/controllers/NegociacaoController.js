@@ -83,13 +83,7 @@ class NegociacaoController {
 
     importaNegociacoes() {
 
-        // funcao some itera o array e quando encontra o elemento para de efetaur a iteracao
-        // nesse caso a filtragem é para buscar o diff da importação com o que já existe (por isso a negação no some)
-        this._service.obterNegociacoes()
-            .then(negociacoes =>
-                negociacoes.filter(negociacao =>
-                    !this._listaNegociacoes.negociacoes.some(negociacaoExistente =>
-                        JSON.stringify(negociacao) == JSON.stringify(negociacaoExistente))))
+        this._service.importa(this._listaNegociacoes.negociacoes)
             .then(negociacoes => negociacoes.forEach(negociacao => 
                 this._adicionaNegociacao(negociacao)
                     .then(mensagem => this._mensagem.texto = 'Importação de negociações realizada com sucesso')

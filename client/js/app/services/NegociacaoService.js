@@ -102,4 +102,20 @@ class NegociacaoService {
                   throw new Error('Não foi possível apagar as negociações')
             });
     }
+
+    importa(listaAtual) {
+
+        // funcao some itera o array e quando encontra o elemento para de efetaur a iteracao
+        // nesse caso a filtragem é para buscar o diff da importação com o que já existe (por isso a negação no some)
+        return this.obterNegociacoes()
+            .then(negociacoes =>
+                negociacoes.filter(negociacao =>
+                    !listaAtual.some(negociacaoExistente =>
+                        JSON.stringify(negociacao) == JSON.stringify(negociacaoExistente))))
+            .catch(erro => {
+                console.log(erro);
+                throw new Error("Não foi possível importar as negociações");
+            });
+    }
+
 }
