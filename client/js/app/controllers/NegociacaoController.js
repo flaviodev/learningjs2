@@ -52,9 +52,33 @@ class NegociacaoController {
 
     apaga() {
 
-        this._listaNegociacoes.esvazia();
-        this._mensagem.texto = 'Negociações apagadas com sucesso';
+        ConnectionFactory
+            .getConnection()
+            .then(connection => new NegociacaoDao(connection))
+            .then(dao => dao.apagaTodos())
+            .then(mensagem => {
+                this._mensagem.texto = mensagem;
+                this._listaNegociacoes.esvazia();
+            });
     }
+
+    apagaTodos() {
+
+        return new Promise((resolve, reject) => {
+    
+            let request = this._connection
+                .transaction([this_store], 'readwrite')
+                .objectStore(this._store)
+                .clear();
+    
+            request.onsuccess = e => resolve('Negociações removidas com sucesso');
+    
+            request.onerror = e => {
+              console.log(e.target.error);
+              reject('Não foi possível remover as negociações');
+            }
+          });
+      }
 
     _limpaFormulario() {
 
