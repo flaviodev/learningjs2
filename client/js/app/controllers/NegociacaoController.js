@@ -41,18 +41,24 @@ class NegociacaoController {
 
     adiciona(event) {
 
-        // desabilita o evento padrão do botao submit
         event.preventDefault();
-
-        let negociacao = this._criaNegociacao();
-
-        new NegociacaoService()
-            .cadastra(negociacao)
+        this._adicionaNegociacao(this._criaNegociacao())
             .then(mensagem => {
-                this._listaNegociacoes.adiciona(negociacao);
                 this._mensagem.texto = mensagem; 
                 this._limpaFormulario();  
-            }).catch(erro => this._mensagem.texto = erro);
+            })
+            .catch(erro => this._mensagem.texto = erro);
+    }
+
+    _adicionaNegociacao(negociacao) {
+        return new Promise((resolve,reject) =>
+            new NegociacaoService()
+                .cadastra(negociacao)
+                .then(mensagem => {
+                    this._listaNegociacoes.adiciona(negociacao);
+                    resolve(mensagem);
+                }).catch(erro => reject(erro))
+        );
     }
 
     apaga() {
@@ -116,9 +122,11 @@ class NegociacaoController {
                     !this._listaNegociacoes.negociacoes.some(negociacaoExistente =>
                         JSON.stringify(negociacao) == JSON.stringify(negociacaoExistente)))
             )
-            .then(negociacoes => negociacoes.forEach(negociacao => {
-                this._listaNegociacoes.adiciona(negociacao);
-                this._mensagem.texto = 'Negociações do período importadas'
-            })).catch(erro => this._mensagem.texto = erro);  
+            .then(negociacoes => negociacoes.forEach(negociacao => 
+                this._adicionaNegociacao(negociacao)
+                    .then(mensagem => this._mensagem.texto = 'Importação de negociações realizada com sucesso')
+                    .catch(erro => this._mensagem.texto = 'Erro ao tentar importar negociações')
+            )).catch(erro => this._mensagem.texto = erro);  
     }
+
 }
