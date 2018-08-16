@@ -90,5 +90,4 @@ class NegociacaoController {
                     .catch(erro => this._mensagem.texto = 'Erro ao tentar importar negociações')))
             .catch(erro => this._mensagem.texto = erro);  
     }
-
 }
