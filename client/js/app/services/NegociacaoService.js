@@ -53,4 +53,18 @@ class NegociacaoService {
                 })
         });
     }
+
+    obterNegociacoes() {
+
+        return new Promise((resolve, reject) => {
+
+            // recurso extremamente útil para 'encadear' diversas promisses 
+            Promise.all([
+                this.obterNegociacoesDaSemana(),
+                this.obterNegociacoesDaSemanaAnterior(),
+                this.obterNegociacoesDaSemanaRetrasada()]
+            ).then(negociacoes => resolve(negociacoes.reduce((arrayAchatado, array) => arrayAchatado.concat(array), [])))
+            .catch(erro => reject(erro));  
+        });
+    }
 }
