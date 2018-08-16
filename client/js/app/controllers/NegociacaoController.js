@@ -45,6 +45,7 @@ class NegociacaoController {
     }
 
     _adicionaNegociacao(negociacao) {
+        
         return new Promise((resolve,reject) =>
             this._service.cadastra(negociacao)
                 .then(mensagem => {
