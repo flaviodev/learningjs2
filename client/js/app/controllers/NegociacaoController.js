@@ -14,25 +14,19 @@ class NegociacaoController {
         this._mensagem = new Bind(
             new Mensagem(), new MensagemView($('#mensagemView')), 'texto');
 
+        this._service = new NegociacaoService();
+
         this._init();
     }
 
     // boa prática: deixar somente a atribuiçõe dos atributos no método construtor
     _init() {
 
-        ConnectionFactory
-            .getConnection()
-            .then(connection => new NegociacaoDao(connection))
-            .then(dao => dao.listaTodos())
+        this._service.lista()
             .then(negociacoes =>
                 negociacoes.forEach(negociacao =>
                     this._listaNegociacoes.adiciona(negociacao)))
-            .catch(erro => {
-
-                console.log(erro);
-                this._mensagem.texto = erro;
-            });
-
+            .catch(erro => this._mensagem.texto = erro);
             
         setInterval(() => {
             this.importaNegociacoes();
@@ -52,8 +46,7 @@ class NegociacaoController {
 
     _adicionaNegociacao(negociacao) {
         return new Promise((resolve,reject) =>
-            new NegociacaoService()
-                .cadastra(negociacao)
+            this._service.cadastra(negociacao)
                 .then(mensagem => {
                     this._listaNegociacoes.adiciona(negociacao);
                     resolve(mensagem);
@@ -113,7 +106,7 @@ class NegociacaoController {
 
         // funcao some itera o array e quando encontra o elemento para de efetaur a iteracao
         // nesse caso a filtragem é para buscar o diff da importação com o que já existe (por isso a negação no some)
-        new NegociacaoService().obterNegociacoes()
+        this._service.obterNegociacoes()
             .then(negociacoes =>
                 negociacoes.filter(negociacao =>
                     !this._listaNegociacoes.negociacoes.some(negociacaoExistente =>
