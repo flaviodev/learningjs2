@@ -103,6 +103,7 @@ class NegociacaoController {
 
         let service = new NegociacaoService();
 
+        // funcao some itera o array e quando encontra o elemento para de efetaur a iteracao
         service
             .obterNegociacoes()
             .then(negociacoes =>
