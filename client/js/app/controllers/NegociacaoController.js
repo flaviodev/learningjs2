@@ -30,7 +30,7 @@ class NegociacaoController {
             
         setInterval(() => {
             this.importaNegociacoes();
-        }, 3000);
+        }, 15000);
     }
 
     adiciona(event) {
@@ -45,7 +45,7 @@ class NegociacaoController {
     }
 
     _adicionaNegociacao(negociacao) {
-        
+
         return new Promise((resolve,reject) =>
             this._service.cadastra(negociacao)
                 .then(mensagem => {
@@ -57,35 +57,13 @@ class NegociacaoController {
 
     apaga() {
 
-        ConnectionFactory
-            .getConnection()
-            .then(connection => new NegociacaoDao(connection))
-            .then(dao => dao.apagaTodos())
+        this._service.apaga()
             .then(mensagem => {
-
                 this._mensagem.texto = mensagem;
                 this._listaNegociacoes.esvazia();
-            });
+            })
+            .catch(erro => this._mensagem.texto = erro);
     }
-
-    apagaTodos() {
-
-        return new Promise((resolve, reject) => {
-    
-            let request = this._connection
-                .transaction([this_store], 'readwrite')
-                .objectStore(this._store)
-                .clear();
-    
-            request.onsuccess = e => resolve('Negociações removidas com sucesso');
-    
-            request.onerror = e => {
-
-              console.log(e.target.error);
-              reject('Não foi possível remover as negociações');
-            }
-          });
-      }
 
     _limpaFormulario() {
 

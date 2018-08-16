@@ -7,15 +7,14 @@ class NegociacaoService {
 
     cadastra(negociacao) {
 
-        return ConnectionFactory
-            .getConnection()
-            .then(conexao => new NegociacaoDao(conexao))
-            .then(dao => dao.adiciona(negociacao))
-            .then(() => 'Negociação cadastrada com sucesso')
-            .catch(erro => {
-
-               throw new Error("Não foi possível adicionar a negociação")
-            });
+        return ConnectionFactory.getConnection()
+           .then(connection => new NegociacaoDao(connection))
+           .then(dao => dao.adiciona(negociacao))
+           .then(() => 'Negociação cadastrada com sucesso')
+           .catch(erro => {
+              console.log(erro);
+              throw new Error('Não foi possível adicionar a negociação')
+           });
    }
 
     obterNegociacoesDaSemana() {
@@ -97,13 +96,10 @@ class NegociacaoService {
         return ConnectionFactory.getConnection()
             .then(connection => new NegociacaoDao(connection))
             .then(dao => dao.apagaTodos())
-            .then(mensagem => {
-                this._mensagem.texto = mensagem;
-                this._listaNegociacoes.esvazia();
-            })
+            .then(() => 'Negociações apagadas com sucesso')
             .catch(erro => {
-                console.log(erro);
-                throw new Error('Falha ao apagar as negociações')
+                  console.log(erro);
+                  throw new Error('Não foi possível apagar as negociações')
             });
     }
 }
