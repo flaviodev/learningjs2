@@ -21,14 +21,13 @@ class NegociacaoController {
             .then(dao => dao.listaTodos())
             .then(negociacoes =>
                 negociacoes.forEach(negociacao =>
-                    this._listaNegociacoes.adiciona(negociacao)));
+                    this._listaNegociacoes.adiciona(negociacao)));  
     }
 
     adiciona(event) {
 
         // desabilita o evento padrão do botao submit
         event.preventDefault();
-
 
         ConnectionFactory
             .getConnection()
