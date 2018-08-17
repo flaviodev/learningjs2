@@ -1,42 +1,59 @@
+"use strict";
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 // o proxy encapsula nesse projeto o tratamento de autalização da view em virtude 
 //     da modificação do estado da propriedades do model
-class ProxyFactory {
+var ProxyFactory = function () {
+    function ProxyFactory() {
+        _classCallCheck(this, ProxyFactory);
+    }
 
-    static create(objeto, props, acao) {
+    _createClass(ProxyFactory, null, [{
+        key: "create",
+        value: function create(objeto, props, acao) {
 
-        return new Proxy(objeto, {
+            return new Proxy(objeto, {
 
-            // interceptando invocação da função
-            get(target, prop, receiver) {
+                // interceptando invocação da função
+                get: function get(target, prop, receiver) {
 
-                if(props.includes(prop) && ProxyFactory._isFuncao(target[prop])) {
-                    return function() {
+                    if (props.includes(prop) && ProxyFactory._isFuncao(target[prop])) {
+                        return function () {
 
-                        console.log(`a propriedade "${prop}" foi interceptada`);
-                        Reflect.apply(target[prop], target, arguments);
-                        return acao(target);
+                            console.log("a propriedade \"" + prop + "\" foi interceptada");
+                            Reflect.apply(target[prop], target, arguments);
+                            return acao(target);
+                        };
                     }
+                    return Reflect.get(target, prop, receiver);
+                },
+
+
+                // interceptado alteração do atributo
+                set: function set(target, prop, value, receiver) {
+                    if (props.includes(prop)) {
+                        console.log("a propriedade \"" + prop + "\" foi interceptada");
+                        target[prop] = value;
+                        acao(target);
+                    }
+
+                    return Reflect.set(target, prop, value, receiver);
                 }
-                return Reflect.get(target, prop, receiver);       
-            },
+            });
+        }
+    }, {
+        key: "_isFuncao",
+        value: function _isFuncao(func) {
 
-            // interceptado alteração do atributo
-            set(target, prop, value, receiver) {
-                if(props.includes(prop)) {
-                    console.log(`a propriedade "${prop}" foi interceptada`);
-                    target[prop] = value;
-                    acao(target);
-                }
-            
-                return Reflect.set(target, prop, value, receiver);
-            }
-        })
-    }
+            return (typeof func === "undefined" ? "undefined" : _typeof(func)) == (typeof Function === "undefined" ? "undefined" : _typeof(Function));
+        }
+    }]);
 
-    static _isFuncao(func) {
-
-        return typeof(func) == typeof(Function);
-    
-    }
-}
+    return ProxyFactory;
+}();
+//# sourceMappingURL=ProxyFactory.js.map
