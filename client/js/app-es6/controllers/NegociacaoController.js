@@ -8,7 +8,7 @@ import {DateHelper} from '../helpers/DateHelper';
 import {Bind} from '../helpers/Bind';
 
 
-export class NegociacaoController {
+class NegociacaoController {
 
     constructor() {
 
@@ -19,10 +19,13 @@ export class NegociacaoController {
         this._inputValor = $('#valor');
         
         this._listaNegociacoes = new Bind (
-            new ListaNegociacoes(), new NegociacoesView($('#negociacoesView')), 'adiciona', 'esvazia');  
+            new ListaNegociacoes(), new NegociacoesView($('#negociacoesView')), 
+            'adiciona', 'esvazia' , 'ordena', 'inverteOrdem');  
 
         this._mensagem = new Bind(
             new Mensagem(), new MensagemView($('#mensagemView')), 'texto');
+
+        this._ordemAtual = '';
 
         this._service = new NegociacaoService();
 
@@ -40,7 +43,7 @@ export class NegociacaoController {
             
         setInterval(() => {
             this.importaNegociacoes();
-        }, 15000);
+        }, 5000);
     }
 
     adiciona(event) {
@@ -100,4 +103,22 @@ export class NegociacaoController {
                     .catch(erro => this._mensagem.texto = 'Erro ao tentar importar negociações')))
             .catch(erro => this._mensagem.texto = erro);  
     }
+
+    ordena(coluna) {
+        
+        if(this._ordemAtual == coluna) {
+            this._listaNegociacoes.inverteOrdem(); 
+        } else {
+            this._listaNegociacoes.ordena((p, s) => p[coluna] - s[coluna]);    
+        }
+        this._ordemAtual = coluna;    
+    }
+}
+
+let negociacaoController = new NegociacaoController();
+
+export function currentInstance() {
+
+    return negociacaoController;
+
 }

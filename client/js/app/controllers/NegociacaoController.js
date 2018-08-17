@@ -3,7 +3,7 @@
 System.register(['../models/ListaNegociacoes', '../models/Mensagem', '../models/Negociacao', '../views/NegociacoesView', '../views/MensagemView', '../services/NegociacaoService', '../helpers/DateHelper', '../helpers/Bind'], function (_export, _context) {
     "use strict";
 
-    var ListaNegociacoes, Mensagem, Negociacao, NegociacoesView, MensagemView, NegociacaoService, DateHelper, Bind, _createClass, NegociacaoController;
+    var ListaNegociacoes, Mensagem, Negociacao, NegociacoesView, MensagemView, NegociacaoService, DateHelper, Bind, _createClass, NegociacaoController, negociacaoController;
 
     function _classCallCheck(instance, Constructor) {
         if (!(instance instanceof Constructor)) {
@@ -48,7 +48,7 @@ System.register(['../models/ListaNegociacoes', '../models/Mensagem', '../models/
                 };
             }();
 
-            _export('NegociacaoController', NegociacaoController = function () {
+            NegociacaoController = function () {
                 function NegociacaoController() {
                     _classCallCheck(this, NegociacaoController);
 
@@ -58,9 +58,11 @@ System.register(['../models/ListaNegociacoes', '../models/Mensagem', '../models/
                     this._inputQuantidade = $('#quantidade');
                     this._inputValor = $('#valor');
 
-                    this._listaNegociacoes = new Bind(new ListaNegociacoes(), new NegociacoesView($('#negociacoesView')), 'adiciona', 'esvazia');
+                    this._listaNegociacoes = new Bind(new ListaNegociacoes(), new NegociacoesView($('#negociacoesView')), 'adiciona', 'esvazia', 'ordena', 'inverteOrdem');
 
                     this._mensagem = new Bind(new Mensagem(), new MensagemView($('#mensagemView')), 'texto');
+
+                    this._ordemAtual = '';
 
                     this._service = new NegociacaoService();
 
@@ -85,7 +87,7 @@ System.register(['../models/ListaNegociacoes', '../models/Mensagem', '../models/
 
                         setInterval(function () {
                             _this.importaNegociacoes();
-                        }, 15000);
+                        }, 5000);
                     }
                 }, {
                     key: 'adiciona',
@@ -158,12 +160,31 @@ System.register(['../models/ListaNegociacoes', '../models/Mensagem', '../models/
                             return _this5._mensagem.texto = erro;
                         });
                     }
+                }, {
+                    key: 'ordena',
+                    value: function ordena(coluna) {
+
+                        if (this._ordemAtual == coluna) {
+                            this._listaNegociacoes.inverteOrdem();
+                        } else {
+                            this._listaNegociacoes.ordena(function (p, s) {
+                                return p[coluna] - s[coluna];
+                            });
+                        }
+                        this._ordemAtual = coluna;
+                    }
                 }]);
 
                 return NegociacaoController;
-            }());
+            }();
 
-            _export('NegociacaoController', NegociacaoController);
+            negociacaoController = new NegociacaoController();
+            function currentInstance() {
+
+                return negociacaoController;
+            }
+
+            _export('currentInstance', currentInstance);
         }
     };
 });
