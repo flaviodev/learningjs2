@@ -1,7 +1,7 @@
 
 // o proxy encapsula nesse projeto o tratamento de autalização da view em virtude 
 //     da modificação do estado da propriedades do model
-class ProxyFactory {
+export class ProxyFactory {
 
     static create(objeto, props, acao) {
 

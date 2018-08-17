@@ -1,6 +1,7 @@
+import {ProxyFactory} from '../services/ProxyFactory';
 
 // o bind retorna um proxy do model relacionando-o com o seu respectivo view, e as propriedades do model que devem atualizar a view
-class Bind {
+export class Bind {
 
     constructor(model, view, ...props) {
 
